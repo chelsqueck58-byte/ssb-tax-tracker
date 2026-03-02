@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { COUNTRY_DATA, FALLBACK_PRICES } from '../data/countries'
 import { usePrices } from '../hooks/usePrices'
+import { getAnnouncementReaction } from '../data/historicalData'
 import { RoleBadge, ExposureBadge } from './RoleBadge'
 import Sparkline from './Sparkline'
 import PriceChart from './PriceChart'
@@ -100,6 +101,11 @@ export default function StockTable({ countryId }) {
 function StockRow({ stock, priceData, isExpanded, isLiquidation, onToggle, chartWindow }) {
   const formatted = formatPrice(priceData)
 
+  const reaction = useMemo(
+    () => chartWindow ? getAnnouncementReaction(stock.ticker, chartWindow.announcementDate, chartWindow.implementationDate) : { annDay: null, annWeek: null },
+    [stock.ticker, chartWindow]
+  )
+
   return (
     <>
       <tr
@@ -127,8 +133,8 @@ function StockRow({ stock, priceData, isExpanded, isLiquidation, onToggle, chart
             <span className="text-xs text-gray-400">—</span>
           )}
         </td>
-        <ChangeCell value={priceData.annDay} />
-        <ChangeCell value={priceData.annWeek} />
+        <ChangeCell value={reaction.annDay} />
+        <ChangeCell value={reaction.annWeek} />
         <td className="px-3 py-2.5 text-center">
           <Sparkline data={priceData.sparkline} />
         </td>
