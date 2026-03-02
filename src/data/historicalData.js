@@ -160,6 +160,46 @@ export function getHistoricalData(ticker, announcementDate, implementationDate) 
   return { series, unit: profile.unit }
 }
 
+// Extract announcement-day and announcement-week % changes from chart data
+export function getAnnouncementReaction(ticker, announcementDate, implementationDate) {
+  const result = getHistoricalData(ticker, announcementDate, implementationDate)
+  if (!result) return { annDay: null, annWeek: null }
+
+  const { series } = result
+  const annTime = new Date(announcementDate).getTime()
+
+  // Find the announcement point index
+  const annIdx = series.findIndex(p => p.date === announcementDate)
+  if (annIdx < 1) return { annDay: null, annWeek: null }
+
+  const priceBefore = series[annIdx - 1].price
+  const priceAnn = series[annIdx].price
+
+  // 1D% = announcement point vs prior point
+  const annDay = ((priceAnn - priceBefore) / priceBefore) * 100
+
+  // 1W% = ~1 week after announcement vs prior point
+  // Find the data point closest to 7 days after announcement
+  const oneWeekMs = 7 * 24 * 60 * 60 * 1000
+  const targetTime = annTime + oneWeekMs
+  let weekIdx = annIdx
+  for (let i = annIdx + 1; i < series.length; i++) {
+    if (new Date(series[i].date).getTime() >= targetTime) {
+      weekIdx = i
+      break
+    }
+  }
+  if (weekIdx === annIdx && annIdx + 1 < series.length) weekIdx = annIdx + 1
+
+  const priceWeek = series[weekIdx].price
+  const annWeek = ((priceWeek - priceBefore) / priceBefore) * 100
+
+  return {
+    annDay: Math.round(annDay * 10) / 10,
+    annWeek: Math.round(annWeek * 10) / 10,
+  }
+}
+
 // Generate 30-point sparkline based on 1Y change direction
 export function getSparklineData(ticker) {
   const rand = seededRandom(hashTicker(ticker) + 999)
