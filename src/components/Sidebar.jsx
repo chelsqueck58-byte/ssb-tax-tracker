@@ -26,9 +26,24 @@ export default function Sidebar({ selected, onSelect }) {
             </div>
           </button>
         ))}
+        <div className="mx-4 my-2 border-t border-navy-light" />
+        <button
+          onClick={() => onSelect('china_summary')}
+          className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors cursor-pointer ${
+            selected === 'china_summary'
+              ? 'bg-blue/30 border-l-3 border-white'
+              : 'hover:bg-white/8 border-l-3 border-transparent'
+          }`}
+        >
+          <span className="text-xl">{'\u{1F1E8}\u{1F1F3}'}</span>
+          <div>
+            <div className="text-sm font-medium">China Summary</div>
+            <div className="text-xs text-blue-200/60">Read-through</div>
+          </div>
+        </button>
       </nav>
       <div className="px-4 py-4 border-t border-navy-light text-xs text-blue-200/40">
-        6 countries &middot; {new Date().getFullYear()} research
+        5 countries &middot; {new Date().getFullYear()} research
       </div>
     </aside>
   )
