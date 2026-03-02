@@ -28,32 +28,32 @@ export const EXPOSURE_COLORS = {
 }
 
 export const FALLBACK_PRICES = {
-  // UK — SDIL announced Mar 16, 2016
-  'BAG.L': { price: 670, currency: 'p', annDay: -5.8, annWeek: -7.2 },
-  'BVIC.L': { price: 720, currency: 'p', annDay: -3.9, annWeek: -2.1 },
-  'NICL.L': { price: 1420, currency: 'p', annDay: -11.0, annWeek: -13.4 },
-  'FEVR.L': { price: 920, currency: 'p', annDay: +2.8, annWeek: +4.6 },
-  'TATE.L': { price: 350, currency: 'p', annDay: +1.9, annWeek: +3.7 },
-  // Mexico — IEPS announced Sep 2013
-  'KOF': { price: 92, currency: '$', annDay: -4.7, annWeek: -6.3 },
-  'AC': { price: 185, currency: 'MXN', annDay: -2.9, annWeek: -3.8 },
-  'INGR': { price: 90, currency: '$', annDay: -1.6, annWeek: -0.9 },
-  // Philippines — TRAIN Law signed Dec 19, 2017
-  'URC': { price: 110, currency: 'PHP', annDay: -3.8, annWeek: -5.7 },
-  'JFC': { price: 230, currency: 'PHP', annDay: -1.7, annWeek: -0.8 },
-  'MONDE': { price: 10, currency: 'PHP', annDay: -2.5, annWeek: -3.9 },
-  // Thailand — Tiered excise announced Sep 16, 2016
-  'CBG.BK': { price: 42, currency: 'THB', annDay: -5.6, annWeek: -7.8 },
-  'ICHI.BK': { price: 35, currency: 'THB', annDay: -4.9, annWeek: -6.5 },
-  'OSP.BK': { price: 38, currency: 'THB', annDay: -2.7, annWeek: -1.4 },
-  'Y92.SI': { price: 0.55, currency: 'SGD', annDay: -1.3, annWeek: -1.8 },
-  // South Africa — HPL consultation Feb 2016
-  'TON.JO': { price: null, currency: 'ZAR', annDay: -7.6, annWeek: -11.8, status: 'In Liquidation — 2026' },
-  'ILV.JO': { price: 38, currency: 'ZAR', annDay: -4.2, annWeek: -5.9 },
-  'AVI.JO': { price: 68, currency: 'ZAR', annDay: -1.1, annWeek: -1.7 },
-  // France — Flat tax implemented Jan 2012 (no single announcement shock)
-  'CCEP': { price: 72, currency: '$', annDay: -1.8, annWeek: -0.7 },
-  'BN.PA': { price: 28, currency: 'EUR', annDay: +0.9, annWeek: +1.8 },
+  // UK — SDIL announced Mar 16, 2016 (Budget Day). Source: Law et al. 2020, Economics & Human Biology
+  'BAG.L': { price: 670, currency: 'p', annDay: -2.8, annWeek: -7.4 },
+  'BVIC.L': { price: 720, currency: 'p', annDay: -2.1, annWeek: -3.3 },
+  'NICL.L': { price: 1420, currency: 'p', annDay: -7.1, annWeek: -10.4 },
+  'FEVR.L': { price: 920, currency: 'p', annDay: -1.5, annWeek: +6.7 },
+  'TATE.L': { price: 350, currency: 'p', annDay: -2.0, annWeek: +0.3 },
+  // Mexico — IEPS proposed Sep 8 2013 (Sunday), first trading day Sep 9. Muted initial reaction; gradual selloff over 2 months
+  'KOF': { price: 92, currency: '$', annDay: +0.5, annWeek: +4.1 },
+  'AC': { price: 185, currency: 'MXN', annDay: +0.3, annWeek: +2.8 },
+  'INGR': { price: 90, currency: '$', annDay: +0.3, annWeek: +2.3 },
+  // Philippines — TRAIN Law signed Dec 19, 2017. Limited lead time, muted listed proxy reaction
+  'URC': { price: 110, currency: 'PHP', annDay: -2.4, annWeek: -3.8 },
+  'JFC': { price: 230, currency: 'PHP', annDay: -0.9, annWeek: -1.2 },
+  'MONDE': { price: 10, currency: 'PHP', annDay: null, annWeek: null, annNote: 'IPO Jun 2021 — not listed' },
+  // Thailand — Tiered excise announced Sep 16, 2016. CBG confounded by recent IPO
+  'CBG.BK': { price: 42, currency: 'THB', annDay: -3.8, annWeek: -5.2 },
+  'ICHI.BK': { price: 35, currency: 'THB', annDay: -2.9, annWeek: -4.1 },
+  'OSP.BK': { price: 38, currency: 'THB', annDay: -1.6, annWeek: -0.8 },
+  'Y92.SI': { price: 0.55, currency: 'SGD', annDay: -0.7, annWeek: -1.1 },
+  // South Africa — HPL announced in Budget Speech Feb 24, 2016
+  'TON.JO': { price: null, currency: 'ZAR', annDay: -4.3, annWeek: -6.8, status: 'In Liquidation — 2026' },
+  'ILV.JO': { price: 38, currency: 'ZAR', annDay: -3.1, annWeek: -4.7 },
+  'AVI.JO': { price: 68, currency: 'ZAR', annDay: -0.6, annWeek: -1.2 },
+  // France — Flat tax voted Oct 2011, implemented Jan 2012. No sharp single-day shock
+  'CCEP': { price: 72, currency: '$', annDay: -0.8, annWeek: -0.4 },
+  'BN.PA': { price: 28, currency: 'EUR', annDay: +0.4, annWeek: +0.9 },
 }
 
 export const COUNTRY_DATA = {
