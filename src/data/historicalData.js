@@ -78,27 +78,29 @@ function weeklyDates(startDate, count) {
 }
 
 // Stock-specific profiles based on actual research findings
+// basePrice = approximate price at start of event study window (local currency)
+// currency/unit for chart Y-axis label
 const STOCK_PROFILES = {
-  'BAG.L': { preDrift: 0.002, announcementShock: -0.06, adjustmentDrift: 0.001, implementationShock: -0.015, postDrift: 0.003, volatility: 0.025, baseDrift: 0.001 },
-  'BVIC.L': { preDrift: 0.002, announcementShock: -0.04, adjustmentDrift: 0.003, implementationShock: 0.01, postDrift: 0.004, volatility: 0.02, baseDrift: 0.002 },
-  'NICL.L': { preDrift: 0.003, announcementShock: -0.11, adjustmentDrift: 0.002, implementationShock: -0.02, postDrift: 0.005, volatility: 0.03, baseDrift: 0.002 },
-  'FEVR.L': { preDrift: 0.005, announcementShock: 0.03, adjustmentDrift: 0.004, implementationShock: 0.02, postDrift: 0.006, volatility: 0.035, baseDrift: 0.003 },
-  'TATE.L': { preDrift: 0.001, announcementShock: 0.02, adjustmentDrift: 0.002, implementationShock: 0.015, postDrift: 0.003, volatility: 0.02, baseDrift: 0.001 },
-  'KOF': { preDrift: 0.002, announcementShock: -0.05, adjustmentDrift: 0.001, implementationShock: -0.03, postDrift: 0.004, volatility: 0.025, baseDrift: 0.002 },
-  'AC': { preDrift: 0.003, announcementShock: -0.03, adjustmentDrift: 0.002, implementationShock: -0.015, postDrift: 0.005, volatility: 0.025, baseDrift: 0.002 },
-  'INGR': { preDrift: 0.001, announcementShock: -0.02, adjustmentDrift: 0.001, implementationShock: -0.01, postDrift: 0.002, volatility: 0.02, baseDrift: 0.001 },
-  'URC': { preDrift: 0.002, announcementShock: -0.04, adjustmentDrift: -0.001, implementationShock: -0.05, postDrift: 0.004, volatility: 0.03, baseDrift: 0.001 },
-  'JFC': { preDrift: 0.003, announcementShock: -0.02, adjustmentDrift: 0.001, implementationShock: -0.02, postDrift: 0.003, volatility: 0.025, baseDrift: 0.002 },
-  'MONDE': { preDrift: 0.001, announcementShock: -0.03, adjustmentDrift: -0.002, implementationShock: -0.03, postDrift: -0.001, volatility: 0.035, baseDrift: -0.001 },
-  'CBG.BK': { preDrift: 0.004, announcementShock: -0.06, adjustmentDrift: 0.001, implementationShock: -0.03, postDrift: 0.002, volatility: 0.03, baseDrift: 0.001 },
-  'ICHI.BK': { preDrift: 0.002, announcementShock: -0.05, adjustmentDrift: -0.001, implementationShock: -0.04, postDrift: -0.001, volatility: 0.035, baseDrift: -0.001 },
-  'OSP.BK': { preDrift: 0.002, announcementShock: -0.03, adjustmentDrift: 0.002, implementationShock: -0.01, postDrift: 0.004, volatility: 0.025, baseDrift: 0.002 },
-  'Y92.SI': { preDrift: 0.001, announcementShock: -0.015, adjustmentDrift: 0.001, implementationShock: -0.005, postDrift: 0.001, volatility: 0.02, baseDrift: 0.001 },
-  'TON.JO': { preDrift: -0.002, announcementShock: -0.08, adjustmentDrift: -0.003, implementationShock: -0.06, postDrift: -0.008, volatility: 0.04, baseDrift: -0.005 },
-  'ILV.JO': { preDrift: 0.001, announcementShock: -0.04, adjustmentDrift: -0.001, implementationShock: -0.03, postDrift: -0.002, volatility: 0.03, baseDrift: -0.001 },
-  'AVI.JO': { preDrift: 0.002, announcementShock: -0.01, adjustmentDrift: 0.001, implementationShock: -0.01, postDrift: 0.001, volatility: 0.02, baseDrift: 0.001 },
-  'CCEP': { preDrift: 0.003, announcementShock: -0.02, adjustmentDrift: 0.002, implementationShock: -0.01, postDrift: 0.003, volatility: 0.02, baseDrift: 0.002 },
-  'BN.PA': { preDrift: 0.001, announcementShock: 0.01, adjustmentDrift: 0.001, implementationShock: 0.005, postDrift: -0.001, volatility: 0.02, baseDrift: 0.001 },
+  'BAG.L': { basePrice: 580, unit: 'p', preDrift: 0.002, announcementShock: -0.06, adjustmentDrift: 0.001, implementationShock: -0.015, postDrift: 0.003, volatility: 0.025, baseDrift: 0.001 },
+  'BVIC.L': { basePrice: 660, unit: 'p', preDrift: 0.002, announcementShock: -0.04, adjustmentDrift: 0.003, implementationShock: 0.01, postDrift: 0.004, volatility: 0.02, baseDrift: 0.002 },
+  'NICL.L': { basePrice: 1350, unit: 'p', preDrift: 0.003, announcementShock: -0.11, adjustmentDrift: 0.002, implementationShock: -0.02, postDrift: 0.005, volatility: 0.03, baseDrift: 0.002 },
+  'FEVR.L': { basePrice: 420, unit: 'p', preDrift: 0.005, announcementShock: 0.03, adjustmentDrift: 0.004, implementationShock: 0.02, postDrift: 0.006, volatility: 0.035, baseDrift: 0.003 },
+  'TATE.L': { basePrice: 580, unit: 'p', preDrift: 0.001, announcementShock: 0.02, adjustmentDrift: 0.002, implementationShock: 0.015, postDrift: 0.003, volatility: 0.02, baseDrift: 0.001 },
+  'KOF': { basePrice: 105, unit: '$', preDrift: 0.002, announcementShock: -0.05, adjustmentDrift: 0.001, implementationShock: -0.03, postDrift: 0.004, volatility: 0.025, baseDrift: 0.002 },
+  'AC': { basePrice: 72, unit: 'MXN', preDrift: 0.003, announcementShock: -0.03, adjustmentDrift: 0.002, implementationShock: -0.015, postDrift: 0.005, volatility: 0.025, baseDrift: 0.002 },
+  'INGR': { basePrice: 62, unit: '$', preDrift: 0.001, announcementShock: -0.02, adjustmentDrift: 0.001, implementationShock: -0.01, postDrift: 0.002, volatility: 0.02, baseDrift: 0.001 },
+  'URC': { basePrice: 155, unit: 'PHP', preDrift: 0.002, announcementShock: -0.04, adjustmentDrift: -0.001, implementationShock: -0.05, postDrift: 0.004, volatility: 0.03, baseDrift: 0.001 },
+  'JFC': { basePrice: 195, unit: 'PHP', preDrift: 0.003, announcementShock: -0.02, adjustmentDrift: 0.001, implementationShock: -0.02, postDrift: 0.003, volatility: 0.025, baseDrift: 0.002 },
+  'MONDE': { basePrice: 18, unit: 'PHP', preDrift: 0.001, announcementShock: -0.03, adjustmentDrift: -0.002, implementationShock: -0.03, postDrift: -0.001, volatility: 0.035, baseDrift: -0.001 },
+  'CBG.BK': { basePrice: 58, unit: 'THB', preDrift: 0.004, announcementShock: -0.06, adjustmentDrift: 0.001, implementationShock: -0.03, postDrift: 0.002, volatility: 0.03, baseDrift: 0.001 },
+  'ICHI.BK': { basePrice: 48, unit: 'THB', preDrift: 0.002, announcementShock: -0.05, adjustmentDrift: -0.001, implementationShock: -0.04, postDrift: -0.001, volatility: 0.035, baseDrift: -0.001 },
+  'OSP.BK': { basePrice: 42, unit: 'THB', preDrift: 0.002, announcementShock: -0.03, adjustmentDrift: 0.002, implementationShock: -0.01, postDrift: 0.004, volatility: 0.025, baseDrift: 0.002 },
+  'Y92.SI': { basePrice: 0.72, unit: 'SGD', preDrift: 0.001, announcementShock: -0.015, adjustmentDrift: 0.001, implementationShock: -0.005, postDrift: 0.001, volatility: 0.02, baseDrift: 0.001 },
+  'TON.JO': { basePrice: 125, unit: 'ZAR', preDrift: -0.002, announcementShock: -0.08, adjustmentDrift: -0.003, implementationShock: -0.06, postDrift: -0.008, volatility: 0.04, baseDrift: -0.005 },
+  'ILV.JO': { basePrice: 28, unit: 'ZAR', preDrift: 0.001, announcementShock: -0.04, adjustmentDrift: -0.001, implementationShock: -0.03, postDrift: -0.002, volatility: 0.03, baseDrift: -0.001 },
+  'AVI.JO': { basePrice: 82, unit: 'ZAR', preDrift: 0.002, announcementShock: -0.01, adjustmentDrift: 0.001, implementationShock: -0.01, postDrift: 0.001, volatility: 0.02, baseDrift: 0.001 },
+  'CCEP': { basePrice: 48, unit: '$', preDrift: 0.003, announcementShock: -0.02, adjustmentDrift: 0.002, implementationShock: -0.01, postDrift: 0.003, volatility: 0.02, baseDrift: 0.002 },
+  'BN.PA': { basePrice: 52, unit: 'EUR', preDrift: 0.001, announcementShock: 0.01, adjustmentDrift: 0.001, implementationShock: 0.005, postDrift: -0.001, volatility: 0.02, baseDrift: 0.001 },
 }
 
 export function getHistoricalData(ticker, announcementDate, implementationDate) {
@@ -113,12 +115,21 @@ export function getHistoricalData(ticker, announcementDate, implementationDate) 
 
   if (totalWeeks < 10) return null
 
-  const prices = generateIndexedSeries(ticker, totalWeeks, announcementWeek, implementationWeek, profile)
+  const indexed = generateIndexedSeries(ticker, totalWeeks, announcementWeek, implementationWeek, profile)
   const dates = weeklyDates(windowStart, totalWeeks)
+  const scale = profile.basePrice / 100
+
+  // Determine decimal places based on price magnitude
+  const roundPrice = (v) => {
+    const raw = v * scale
+    if (profile.basePrice < 1) return Math.round(raw * 1000) / 1000
+    if (profile.basePrice < 10) return Math.round(raw * 100) / 100
+    return Math.round(raw * 10) / 10
+  }
 
   const series = dates.map((date, i) => ({
     date,
-    price: Math.round(prices[i] * 10) / 10,
+    price: roundPrice(indexed[i]),
   }))
 
   // Inject exact event dates so ReferenceLine can match them
@@ -132,7 +143,6 @@ export function getHistoricalData(ticker, announcementDate, implementationDate) 
     const alreadyExists = series.some(p => p.date === ev.date)
     if (alreadyExists) continue
 
-    // Find insertion point and interpolate price
     let insertIdx = series.findIndex(p => new Date(p.date).getTime() > evTime)
     if (insertIdx === -1) continue
     if (insertIdx === 0) insertIdx = 1
@@ -142,12 +152,12 @@ export function getHistoricalData(ticker, announcementDate, implementationDate) 
     const t1 = new Date(before.date).getTime()
     const t2 = new Date(after.date).getTime()
     const ratio = (evTime - t1) / (t2 - t1)
-    const interpolatedPrice = Math.round((before.price + ratio * (after.price - before.price)) * 10) / 10
+    const interpolatedPrice = Math.round((before.price + ratio * (after.price - before.price)) * 100) / 100
 
     series.splice(insertIdx, 0, { date: ev.date, price: interpolatedPrice })
   }
 
-  return series
+  return { series, unit: profile.unit }
 }
 
 // Generate 30-point sparkline based on 1Y change direction

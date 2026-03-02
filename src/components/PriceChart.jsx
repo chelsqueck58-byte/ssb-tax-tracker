@@ -14,17 +14,17 @@ function formatDateLabel(dateStr) {
 export default function PriceChart({ ticker, company, chartWindow }) {
   const { announcementDate, implementationDate } = chartWindow
 
-  const data = useMemo(
+  const result = useMemo(
     () => getHistoricalData(ticker, announcementDate, implementationDate),
     [ticker, announcementDate, implementationDate]
   )
 
-  if (!data || data.length === 0) {
+  if (!result || result.series.length === 0) {
     return (
       <div className="bg-gray-50 border border-gray-200 rounded p-6">
         <div className="text-center">
           <p className="text-sm font-medium text-gray-600 mb-2">
-            {company} ({ticker}) — Indexed Price History
+            {company} ({ticker}) — Price History
           </p>
           <div className="h-40 flex items-center justify-center border border-dashed border-gray-300 rounded bg-white">
             <span className="text-gray-400 text-xs">Historical data unavailable</span>
@@ -34,16 +34,18 @@ export default function PriceChart({ ticker, company, chartWindow }) {
     )
   }
 
+  const { series, unit } = result
+
   return (
     <div className="bg-gray-50 border border-gray-200 rounded p-4">
       <p className="text-sm font-medium text-gray-600 mb-3">
-        {company} ({ticker}) — Price Indexed to 100
+        {company} ({ticker}) — Price ({unit})
         <span className="text-xs text-gray-400 ml-2">
           12mo pre-announcement → 24mo post-implementation
         </span>
       </p>
       <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={data} margin={{ top: 30, right: 20, bottom: 5, left: 10 }}>
+        <LineChart data={series} margin={{ top: 30, right: 20, bottom: 5, left: 15 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
           <XAxis
             dataKey="date"
@@ -58,11 +60,12 @@ export default function PriceChart({ ticker, company, chartWindow }) {
           <YAxis
             tick={{ fontSize: 10, fill: '#6b7280' }}
             domain={['auto', 'auto']}
-            tickFormatter={(v) => v.toFixed(0)}
+            tickFormatter={(v) => `${v}`}
+            label={{ value: unit, position: 'insideTopLeft', offset: -10, fontSize: 10, fill: '#9ca3af' }}
           />
           <Tooltip
             contentStyle={{ fontSize: 12, border: '1px solid #e5e7eb' }}
-            formatter={(value) => [value.toFixed(1), 'Index']}
+            formatter={(value) => [`${value} ${unit}`, 'Price']}
             labelFormatter={(label) => `Date: ${label}`}
           />
           <Line
