@@ -16,20 +16,6 @@ function ChangeCell({ value }) {
   )
 }
 
-function formatPrice(priceData) {
-  if (!priceData || priceData.status) return null
-  if (priceData.price == null) return null
-  const { price, currency } = priceData
-  if (currency === 'p') return `${price.toFixed(0)}p`
-  if (currency === 'GBp') return `${price.toFixed(0)}p`
-  const symbols = { USD: '$', '$': '$', MXN: 'MXN ', PHP: 'PHP ', THB: 'THB ', SGD: 'SGD ', ZAR: 'ZAR ', EUR: 'EUR ' }
-  const sym = symbols[currency] || `${currency} `
-  if (['MXN', 'PHP', 'THB', 'SGD', 'ZAR', 'EUR'].includes(currency) || ['MXN ', 'PHP ', 'THB ', 'SGD ', 'ZAR ', 'EUR '].includes(sym)) {
-    return `${sym}${price.toFixed(2)}`
-  }
-  return `${sym}${price.toFixed(2)}`
-}
-
 export default function StockTable({ countryId }) {
   const [expandedRow, setExpandedRow] = useState(null)
   const countryData = COUNTRY_DATA[countryId]
@@ -48,7 +34,7 @@ export default function StockTable({ countryId }) {
     <div>
       <div className="flex items-center justify-between mb-3">
         <span className="text-xs text-gray-400">
-          Prices as of Mar 2026 &middot; Click row to expand event study chart
+          Click row to expand event study chart
         </span>
       </div>
 
@@ -67,7 +53,6 @@ export default function StockTable({ countryId }) {
               <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Exchange</th>
               <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Role</th>
               <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">SSB Exp.</th>
-              <th className="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Price</th>
               <th className="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider" title="Stock price change on announcement day">Ann. 1D%</th>
               <th className="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider" title="Stock price change in week following announcement">Ann. 1W%</th>
               <th className="text-center px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">30D</th>
@@ -77,7 +62,6 @@ export default function StockTable({ countryId }) {
             {countryData.stocks.map((stock) => {
               const priceData = prices[stock.ticker] || FALLBACK_PRICES[stock.ticker] || {}
               const isExpanded = expandedRow === stock.ticker
-              const isLiquidation = stock.isLiquidation
 
               return (
                 <StockRow
@@ -85,7 +69,6 @@ export default function StockTable({ countryId }) {
                   stock={stock}
                   priceData={priceData}
                   isExpanded={isExpanded}
-                  isLiquidation={isLiquidation}
                   onToggle={() => toggleRow(stock.ticker)}
                   chartWindow={countryData.chartWindow}
                 />
@@ -98,9 +81,7 @@ export default function StockTable({ countryId }) {
   )
 }
 
-function StockRow({ stock, priceData, isExpanded, isLiquidation, onToggle, chartWindow }) {
-  const formatted = formatPrice(priceData)
-
+function StockRow({ stock, priceData, isExpanded, onToggle, chartWindow }) {
   const reaction = useMemo(
     () => chartWindow ? getAnnouncementReaction(stock.ticker, chartWindow.announcementDate, chartWindow.implementationDate) : { annDay: null, annWeek: null },
     [stock.ticker, chartWindow]
@@ -112,7 +93,7 @@ function StockRow({ stock, priceData, isExpanded, isLiquidation, onToggle, chart
         onClick={onToggle}
         className={`border-b border-gray-100 cursor-pointer transition-colors hover:bg-blue-50/50 ${
           isExpanded ? 'bg-blue-50/30' : ''
-        } ${isLiquidation ? 'bg-red-50/40' : ''}`}
+        }`}
       >
         <td className="px-3 py-2.5 font-mono text-xs font-semibold text-navy">
           {stock.ticker}
@@ -124,15 +105,6 @@ function StockRow({ stock, priceData, isExpanded, isLiquidation, onToggle, chart
         <td className="px-3 py-2.5 text-xs text-gray-500">{stock.exchange}</td>
         <td className="px-3 py-2.5"><RoleBadge role={stock.role} /></td>
         <td className="px-3 py-2.5"><ExposureBadge exposure={stock.exposure} /></td>
-        <td className="px-3 py-2.5 text-right">
-          {isLiquidation ? (
-            <span className="text-xs font-bold text-red-inc">In Liquidation — 2026</span>
-          ) : formatted ? (
-            <span className="text-sm font-medium tabular-nums">{formatted}</span>
-          ) : (
-            <span className="text-xs text-gray-400">—</span>
-          )}
-        </td>
         <ChangeCell value={reaction.annDay} />
         <ChangeCell value={reaction.annWeek} />
         <td className="px-3 py-2.5 text-center">
@@ -141,7 +113,7 @@ function StockRow({ stock, priceData, isExpanded, isLiquidation, onToggle, chart
       </tr>
       {isExpanded && (
         <tr>
-          <td colSpan="9" className="px-4 py-4 bg-gray-50/80">
+          <td colSpan="8" className="px-4 py-4 bg-gray-50/80">
             <PriceChart
               ticker={stock.ticker}
               company={stock.company}
