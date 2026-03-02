@@ -1,7 +1,6 @@
 export const COUNTRIES = [
   { id: 'uk', name: 'United Kingdom', flag: '\u{1F1EC}\u{1F1E7}', short: 'UK' },
   { id: 'mexico', name: 'Mexico', flag: '\u{1F1F2}\u{1F1FD}', short: 'MX' },
-  { id: 'philippines', name: 'Philippines', flag: '\u{1F1F5}\u{1F1ED}', short: 'PH' },
   { id: 'thailand', name: 'Thailand', flag: '\u{1F1F9}\u{1F1ED}', short: 'TH' },
   { id: 'south_africa', name: 'South Africa', flag: '\u{1F1FF}\u{1F1E6}', short: 'ZA' },
   { id: 'france', name: 'France', flag: '\u{1F1EB}\u{1F1F7}', short: 'FR' },
@@ -28,32 +27,20 @@ export const EXPOSURE_COLORS = {
 }
 
 export const FALLBACK_PRICES = {
-  // UK — SDIL announced Mar 16, 2016 (Budget Day). Source: Law et al. 2020, Economics & Human Biology (abnormal returns)
-  'BAG.L': { price: 670, currency: 'p', annDay: -2.8, annWeek: -7.4 },
-  'BVIC.L': { price: 720, currency: 'p', annDay: -2.1, annWeek: -3.3 },
-  'NICL.L': { price: 1420, currency: 'p', annDay: -7.1, annWeek: -10.4 },
-  'FEVR.L': { price: 920, currency: 'p', annDay: -1.5, annWeek: +6.7 },
-  'TATE.L': { price: 350, currency: 'p', annDay: -2.0, annWeek: +0.3 },
-  // Mexico — IEPS proposed Sep 8 2013 (Sunday). Source: Yahoo Finance (KOF $93.73→$94.23→$97.60). Muted 1D; gradual 2-month selloff
-  'KOF': { price: 92, currency: '$', annDay: +0.5, annWeek: +4.1 },
-  'AC': { price: 185, currency: 'MXN', annDay: +0.3, annWeek: +2.8 },
-  'INGR': { price: 90, currency: '$', annDay: +0.3, annWeek: +2.3 },
-  // Philippines — TRAIN Law signed Dec 19, 2017. Source: OTC proxies UVRBF/JBFCF × USD/PHP rate
-  'URC': { price: 110, currency: 'PHP', annDay: -1.1, annWeek: -1.9 },
-  'JFC': { price: 230, currency: 'PHP', annDay: -0.7, annWeek: -4.4 },
-  'MONDE': { price: 10, currency: 'PHP', annDay: null, annWeek: null },
-  // Thailand — Excise Tax Act enacted Mar 2017, implemented Sep 16 2017. Source: Yahoo Finance. No Sep 2016 announcement found
-  'CBG.BK': { price: 42, currency: 'THB', annDay: +0.3, annWeek: +5.8 },
-  'ICHI.BK': { price: 35, currency: 'THB', annDay: -1.2, annWeek: -5.9 },
-  'OSP.BK': { price: 38, currency: 'THB', annDay: null, annWeek: null },
-  'Y92.SI': { price: 0.55, currency: 'SGD', annDay: -0.5, annWeek: -2.7 },
-  // South Africa — HPL announced Budget Speech Feb 24, 2016. Source: Yahoo Finance (AVI only; TON/ILV delisted, no free data)
-  'TON.JO': { price: null, currency: 'ZAR', annDay: null, annWeek: null, status: 'In Liquidation — 2026' },
-  'ILV.JO': { price: 38, currency: 'ZAR', annDay: null, annWeek: null },
-  'AVI.JO': { price: 68, currency: 'ZAR', annDay: -0.6, annWeek: +4.8 },
-  // France — Fillon announced soda tax Aug 24, 2011. Source: Yahoo Finance (CCE $27.53→$26.61→$27.62)
-  'CCEP': { price: 72, currency: '$', annDay: -3.3, annWeek: +0.3 },
-  'BN.PA': { price: 28, currency: 'EUR', annDay: +0.3, annWeek: +0.4 },
+  // Prices are latest values from Yahoo Finance historical data
+  'BAG.L': { price: 508, currency: 'p' },
+  'NICL.L': { price: 1360, currency: 'p' },
+  'FEVR.L': { price: 152.5, currency: 'p' },
+  'TATE.L': { price: 590, currency: 'p' },
+  'KOF': { price: 119.27, currency: '$' },
+  'AC': { price: 96.05, currency: 'MXN' },
+  'INGR': { price: 67.08, currency: '$' },
+  'CBG.BK': { price: 44.5, currency: 'THB' },
+  'ICHI.BK': { price: 44, currency: 'THB' },
+  'Y92.SI': { price: 0.74, currency: 'SGD' },
+  'AVI.JO': { price: 85, currency: 'ZAR' },
+  'CCEP': { price: 25.6, currency: '$' },
+  'BN.PA': { price: 47.38, currency: 'EUR' },
 }
 
 export const COUNTRY_DATA = {
@@ -64,11 +51,6 @@ export const COUNTRY_DATA = {
         ticker: 'BAG.L', company: 'AG Barr', exchange: 'LSE',
         role: 'Incumbent', exposure: 'High',
         description: 'Irn-Bru maker, most directly exposed to SDIL cliff-edge threshold.',
-      },
-      {
-        ticker: 'BVIC.L', company: 'Britvic', exchange: 'LSE',
-        role: 'Incumbent', exposure: 'High',
-        description: 'Robinsons, J2O, Pepsi UK bottler. Proactive reformulator pre-2018.',
       },
       {
         ticker: 'NICL.L', company: 'Nichols', exchange: 'LSE',
@@ -100,7 +82,7 @@ export const COUNTRY_DATA = {
       ],
       equityImpact: [
         'NICL.L fell -11% on announcement day (Mar 16 2016) — sharpest single-stock SSB tax reaction globally',
-        'BVIC.L outperformed post-implementation after early reformulation of Robinsons and Fruit Shoot',
+        'BAG.L (Irn-Bru) reformulated pre-implementation — reduced sugar content to avoid higher tier',
         'TATE.L sucralose volumes +16% FY2025 as Splenda became preferred substitute in UK reformulations',
       ],
       chinaReadthrough: [
@@ -169,55 +151,6 @@ export const COUNTRY_DATA = {
     chartWindow: { announcementDate: '2013-09-01', implementationDate: '2014-01-01' },
   },
 
-  philippines: {
-    disclaimer: 'Primary SSB incumbents (CCBPI/CCBA) were unlisted at implementation — companies shown are best available listed proxies.',
-    stocks: [
-      {
-        ticker: 'URC', company: 'Universal Robina Corp', exchange: 'PSE',
-        role: 'Proxy Incumbent', exposure: 'Medium',
-        description: 'Largest listed domestic F&B company. Beverage sales -10% FY2018, recovered within 1 year. Primary incumbents (CCBPI, Pepsi PH) are unlisted.',
-      },
-      {
-        ticker: 'JFC', company: 'Jollibee Foods', exchange: 'PSE',
-        role: 'Adjacent Proxy', exposure: 'Low',
-        description: 'Listed large-cap consumer proxy for Philippine consumer sentiment around TRAIN.',
-      },
-      {
-        ticker: 'MONDE', company: 'Monde Nissin', exchange: 'PSE',
-        role: 'Adjacent Proxy', exposure: 'Low',
-        description: 'Listed packaged food/beverage company with some SSB-adjacent exposure.',
-      },
-    ],
-    taxContext: {
-      design: [
-        'TRAIN Law: PHP 6/L on standard sweetened beverages',
-        'PHP 12/L on HFCS-sweetened beverages (punitive tier)',
-        'Implemented Jan 1 2018 — signed Dec 19 2017, minimal lead time',
-        'Revenue earmarked for infrastructure and social spending',
-      ],
-      reformulation: [
-        'HFCS-to-cane-sugar reformulation was primary response — not sugar reduction',
-        'PHP 12/L HFCS tier created arbitrage for switching to PHP 6/L cane sugar tier',
-        'URC beverage sales recovered within 12 months via pricing and mix shift',
-      ],
-      equityImpact: [
-        'URC beverage segment revenue -10% FY2018, full recovery by FY2019',
-        'JFC showed consumer resilience — QSR traffic held despite TRAIN-related consumer sentiment weakness',
-        'Primary incumbents CCBPI and Pepsi PH were unlisted — stock market impact largely unobservable',
-      ],
-      chinaReadthrough: [
-        'HFCS penalty tier is directly relevant — China is world\'s second-largest HFCS producer after US',
-        'If China adopts HFCS-punitive tiering, expect rapid reformulation to cane sugar (benefiting Guangxi mills)',
-        'Short lead time (2 weeks) caused maximum disruption — argues for China adopting UK-style 2-year window',
-      ],
-    },
-    timeline: [
-      { date: 'Dec 19, 2017', event: 'TRAIN Law Signed', type: 'announcement' },
-      { date: 'Jan 1, 2018', event: 'SSB Tax Implemented', type: 'implementation' },
-      { date: '2019', event: 'Revenue targets met, no escalation', type: 'note' },
-    ],
-    chartWindow: { announcementDate: '2017-12-19', implementationDate: '2018-01-01' },
-  },
 
   thailand: {
     disclaimer: 'No clean SSB event study available — CBG sugar tax signal confounded by IPO timing (Sep 2014) and commodity cycles.',
@@ -231,11 +164,6 @@ export const COUNTRY_DATA = {
         ticker: 'ICHI.BK', company: 'Ichitan Group', exchange: 'SET',
         role: 'Incumbent', exposure: 'High',
         description: 'RTD green tea specialist. Direct competitor to Oishi. Faced same reformulation pressure.',
-      },
-      {
-        ticker: 'OSP.BK', company: 'Oishi Group', exchange: 'SET',
-        role: 'Incumbent/Beneficiary', exposure: 'Medium',
-        description: "ThaiBev's RTD green tea arm. Reformulated and launched Oishi Gold sugar-free. Revenue grew despite tax.",
       },
       {
         ticker: 'Y92.SI', company: 'Thai Beverage (ThaiBev)', exchange: 'SGX',
@@ -257,7 +185,7 @@ export const COUNTRY_DATA = {
       ],
       equityImpact: [
         'CBG.BK: export revenue (~40%) provided diversification buffer but domestic margins pressured',
-        'OSP.BK revenue grew despite tax — Oishi Gold sugar-free launch was net positive catalyst',
+        'ICHI.BK faced direct RTD tea margin pressure from tiered excise',
         'Y92.SI SSB signal diluted by ~80% alcohol revenue — not a clean read',
       ],
       chinaReadthrough: [
@@ -277,19 +205,8 @@ export const COUNTRY_DATA = {
   },
 
   south_africa: {
-    disclaimer: 'Primary SSB incumbents (CCBPI/CCBA) were unlisted at implementation — companies shown are best available listed proxies.',
+    disclaimer: 'Primary incumbents (CCBA, Tongaat Hulett, Illovo) were unlisted or delisted — AVI is the only available listed proxy.',
     stocks: [
-      {
-        ticker: 'TON.JO', company: 'Tongaat Hulett', exchange: 'JSE',
-        role: 'Sugar Processor', exposure: 'High',
-        description: "South Africa's largest cane sugar producer. HPL contributed to structural domestic demand decline. Business rescue 2022, provisional liquidation 2026. Extreme downstream analog for China cane sugar processors.",
-        isLiquidation: true,
-      },
-      {
-        ticker: 'ILV.JO', company: 'Illovo Sugar Africa', exchange: 'JSE',
-        role: 'Sugar Processor', exposure: 'High',
-        description: 'ABF subsidiary. Reduced domestic beverage-sector sugar demand post-HPL. Direct cane sugar processor analog.',
-      },
       {
         ticker: 'AVI.JO', company: 'AVI Ltd', exchange: 'JSE',
         role: 'Adjacent Proxy', exposure: 'Low',
