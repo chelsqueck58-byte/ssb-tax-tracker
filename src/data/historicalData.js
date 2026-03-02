@@ -3050,41 +3050,63 @@ export function getHistoricalData(ticker, announcementDate, implementationDate) 
   return { series, unit: entry.unit }
 }
 
+// Daily close prices around announcement dates (Yahoo Finance)
+// Used for true day-before → day-of 1D% calculation
+const DAILY_PRICES = {
+  'BAG.L|2016-03-16': [['2016-03-15',554],['2016-03-16',540.5],['2016-03-17',511],['2016-03-18',508],['2016-03-21',518],['2016-03-22',515.5],['2016-03-23',515.5]],
+  'NICL.L|2016-03-16': [['2016-03-15',1305],['2016-03-16',1219],['2016-03-17',1225],['2016-03-18',1250],['2016-03-21',1234],['2016-03-22',1236],['2016-03-23',1243]],
+  'FEVR.L|2016-03-16': [['2016-03-15',635],['2016-03-16',631],['2016-03-17',643],['2016-03-18',671],['2016-03-21',675.5],['2016-03-22',680],['2016-03-23',653]],
+  'TATE.L|2016-03-16': [['2016-03-15',665],['2016-03-16',658.58],['2016-03-17',649.25],['2016-03-18',648.08],['2016-03-21',649.83],['2016-03-22',644],['2016-03-23',654.5]],
+  'KOF|2013-09-01': [['2013-08-30',120.02],['2013-09-03',122.5],['2013-09-04',122.95],['2013-09-05',124.69],['2013-09-06',128.44],['2013-09-09',129.12]],
+  'AC|2013-09-01': [['2013-08-30',84.59],['2013-09-02',87.33],['2013-09-03',84.16],['2013-09-04',85.34],['2013-09-05',83.91],['2013-09-06',84.87],['2013-09-09',85.73]],
+  'INGR|2013-09-01': [['2013-08-30',62.94],['2013-09-03',63.13],['2013-09-04',63.05],['2013-09-05',62.97],['2013-09-06',62.96],['2013-09-09',63.15]],
+  'CBG.BK|2016-09-16': [['2016-09-15',61.5],['2016-09-16',62.25],['2016-09-19',63.75],['2016-09-20',63],['2016-09-21',64.5],['2016-09-22',66.25],['2016-09-23',64.75]],
+  'ICHI.BK|2016-09-16': [['2016-09-15',10.8],['2016-09-16',11.1],['2016-09-19',11],['2016-09-20',10.6],['2016-09-21',10.9],['2016-09-22',11],['2016-09-23',10.8]],
+  'Y92.SI|2016-09-16': [['2016-09-15',0.93],['2016-09-16',0.93],['2016-09-19',0.96],['2016-09-20',0.95],['2016-09-21',0.96],['2016-09-22',0.96],['2016-09-23',0.96]],
+  'AVI.JO|2016-02-01': [['2016-01-29',79.6],['2016-02-01',78.42],['2016-02-02',78.12],['2016-02-03',79.69],['2016-02-04',81.45],['2016-02-05',80.65],['2016-02-08',80.23]],
+  'CCEP|2011-09-01': [['2011-08-31',27.62],['2011-09-01',27.49],['2011-09-02',26.9],['2011-09-06',26.86],['2011-09-07',27],['2011-09-08',26.97],['2011-09-09',25.34]],
+  'BN.PA|2011-09-01': [['2011-08-31',47],['2011-09-01',47.94],['2011-09-02',47.63],['2011-09-05',46.27],['2011-09-06',46.61],['2011-09-07',46.53],['2011-09-08',45.33]],
+  'TATE.L|2011-09-01': [['2011-08-31',676.67],['2011-09-01',685.42],['2011-09-02',686],['2011-09-05',665],['2011-09-06',673.17],['2011-09-07',688.92],['2011-09-08',704.08]],
+}
+
 export function getAnnouncementReaction(ticker, announcementDate, implementationDate) {
+  const key = `${ticker}|${announcementDate}`
+
+  // 1D%: use daily data (day before → day of announcement)
+  let annDay = null
+  const daily = DAILY_PRICES[key]
+  if (daily && daily.length >= 2) {
+    const priceBefore = daily[0][1]
+    const priceAnn = daily[1][1]
+    annDay = Math.round(((priceAnn - priceBefore) / priceBefore) * 1000) / 10
+  }
+
+  // 1W%: use weekly data (week before → week after announcement)
+  let annWeek = null
   const result = getHistoricalData(ticker, announcementDate, implementationDate)
-  if (!result) return { annDay: null, annWeek: null }
-
-  const { series } = result
-  const annTime = new Date(announcementDate).getTime()
-
-  // Find closest point on or just before announcement
-  let annIdx = -1
-  for (let i = 0; i < series.length; i++) {
-    if (series[i].date === announcementDate) { annIdx = i; break }
-    if (new Date(series[i].date).getTime() > annTime) { annIdx = i; break }
+  if (result) {
+    const { series } = result
+    const annTime = new Date(announcementDate).getTime()
+    let annIdx = -1
+    for (let i = 0; i < series.length; i++) {
+      if (series[i].date === announcementDate) { annIdx = i; break }
+      if (new Date(series[i].date).getTime() > annTime) { annIdx = i; break }
+    }
+    if (annIdx >= 1) {
+      const priceBefore = series[annIdx - 1].price
+      const oneWeekMs = 7 * 24 * 60 * 60 * 1000
+      const targetTime = annTime + oneWeekMs
+      let weekIdx = annIdx
+      for (let i = annIdx + 1; i < series.length; i++) {
+        if (new Date(series[i].date).getTime() >= targetTime) { weekIdx = i; break }
+      }
+      if (weekIdx === annIdx && annIdx + 1 < series.length) weekIdx = annIdx + 1
+      const priceWeek = series[weekIdx].price
+      annWeek = Math.round(((priceWeek - priceBefore) / priceBefore) * 1000) / 10
+    }
   }
-  if (annIdx < 1) return { annDay: null, annWeek: null }
 
-  const priceBefore = series[annIdx - 1].price
-  const priceAnn = series[annIdx].price
-  const annDay = ((priceAnn - priceBefore) / priceBefore) * 100
-
-  // 1W%: find point closest to 7 days after announcement
-  const oneWeekMs = 7 * 24 * 60 * 60 * 1000
-  const targetTime = annTime + oneWeekMs
-  let weekIdx = annIdx
-  for (let i = annIdx + 1; i < series.length; i++) {
-    if (new Date(series[i].date).getTime() >= targetTime) { weekIdx = i; break }
-  }
-  if (weekIdx === annIdx && annIdx + 1 < series.length) weekIdx = annIdx + 1
-
-  const priceWeek = series[weekIdx].price
-  const annWeek = ((priceWeek - priceBefore) / priceBefore) * 100
-
-  return {
-    annDay: Math.round(annDay * 10) / 10,
-    annWeek: Math.round(annWeek * 10) / 10,
-  }
+  return { annDay, annWeek }
 }
 
 // Seeded PRNG for sparkline (decorative only)
