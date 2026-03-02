@@ -28,32 +28,32 @@ export const EXPOSURE_COLORS = {
 }
 
 export const FALLBACK_PRICES = {
-  // UK — SDIL announced Mar 16, 2016 (Budget Day). Source: Law et al. 2020, Economics & Human Biology
+  // UK — SDIL announced Mar 16, 2016 (Budget Day). Source: Law et al. 2020, Economics & Human Biology (abnormal returns)
   'BAG.L': { price: 670, currency: 'p', annDay: -2.8, annWeek: -7.4 },
   'BVIC.L': { price: 720, currency: 'p', annDay: -2.1, annWeek: -3.3 },
   'NICL.L': { price: 1420, currency: 'p', annDay: -7.1, annWeek: -10.4 },
   'FEVR.L': { price: 920, currency: 'p', annDay: -1.5, annWeek: +6.7 },
   'TATE.L': { price: 350, currency: 'p', annDay: -2.0, annWeek: +0.3 },
-  // Mexico — IEPS proposed Sep 8 2013 (Sunday), first trading day Sep 9. Muted initial reaction; gradual selloff over 2 months
+  // Mexico — IEPS proposed Sep 8 2013 (Sunday). Source: Yahoo Finance (KOF $93.73→$94.23→$97.60). Muted 1D; gradual 2-month selloff
   'KOF': { price: 92, currency: '$', annDay: +0.5, annWeek: +4.1 },
   'AC': { price: 185, currency: 'MXN', annDay: +0.3, annWeek: +2.8 },
   'INGR': { price: 90, currency: '$', annDay: +0.3, annWeek: +2.3 },
-  // Philippines — TRAIN Law signed Dec 19, 2017. Limited lead time, muted listed proxy reaction
-  'URC': { price: 110, currency: 'PHP', annDay: -2.4, annWeek: -3.8 },
-  'JFC': { price: 230, currency: 'PHP', annDay: -0.9, annWeek: -1.2 },
-  'MONDE': { price: 10, currency: 'PHP', annDay: null, annWeek: null, annNote: 'IPO Jun 2021 — not listed' },
-  // Thailand — Tiered excise announced Sep 16, 2016. CBG confounded by recent IPO
-  'CBG.BK': { price: 42, currency: 'THB', annDay: -3.8, annWeek: -5.2 },
-  'ICHI.BK': { price: 35, currency: 'THB', annDay: -2.9, annWeek: -4.1 },
-  'OSP.BK': { price: 38, currency: 'THB', annDay: -1.6, annWeek: -0.8 },
-  'Y92.SI': { price: 0.55, currency: 'SGD', annDay: -0.7, annWeek: -1.1 },
-  // South Africa — HPL announced in Budget Speech Feb 24, 2016
-  'TON.JO': { price: null, currency: 'ZAR', annDay: -4.3, annWeek: -6.8, status: 'In Liquidation — 2026' },
-  'ILV.JO': { price: 38, currency: 'ZAR', annDay: -3.1, annWeek: -4.7 },
-  'AVI.JO': { price: 68, currency: 'ZAR', annDay: -0.6, annWeek: -1.2 },
-  // France — Flat tax voted Oct 2011, implemented Jan 2012. No sharp single-day shock
-  'CCEP': { price: 72, currency: '$', annDay: -0.8, annWeek: -0.4 },
-  'BN.PA': { price: 28, currency: 'EUR', annDay: +0.4, annWeek: +0.9 },
+  // Philippines — TRAIN Law signed Dec 19, 2017. Source: OTC proxies UVRBF/JBFCF × USD/PHP rate
+  'URC': { price: 110, currency: 'PHP', annDay: -1.1, annWeek: -1.9 },
+  'JFC': { price: 230, currency: 'PHP', annDay: -0.7, annWeek: -4.4 },
+  'MONDE': { price: 10, currency: 'PHP', annDay: null, annWeek: null },
+  // Thailand — Excise Tax Act enacted Mar 2017, implemented Sep 16 2017. Source: Yahoo Finance. No Sep 2016 announcement found
+  'CBG.BK': { price: 42, currency: 'THB', annDay: +0.3, annWeek: +5.8 },
+  'ICHI.BK': { price: 35, currency: 'THB', annDay: -1.2, annWeek: -5.9 },
+  'OSP.BK': { price: 38, currency: 'THB', annDay: null, annWeek: null },
+  'Y92.SI': { price: 0.55, currency: 'SGD', annDay: -0.5, annWeek: -2.7 },
+  // South Africa — HPL announced Budget Speech Feb 24, 2016. Source: Yahoo Finance (AVI only; TON/ILV delisted, no free data)
+  'TON.JO': { price: null, currency: 'ZAR', annDay: null, annWeek: null, status: 'In Liquidation — 2026' },
+  'ILV.JO': { price: 38, currency: 'ZAR', annDay: null, annWeek: null },
+  'AVI.JO': { price: 68, currency: 'ZAR', annDay: -0.6, annWeek: +4.8 },
+  // France — Fillon announced soda tax Aug 24, 2011. Source: Yahoo Finance (CCE $27.53→$26.61→$27.62)
+  'CCEP': { price: 72, currency: '$', annDay: -3.3, annWeek: +0.3 },
+  'BN.PA': { price: 28, currency: 'EUR', annDay: +0.3, annWeek: +0.4 },
 }
 
 export const COUNTRY_DATA = {
