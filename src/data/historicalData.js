@@ -3047,6 +3047,30 @@ export function getHistoricalData(ticker, announcementDate, implementationDate) 
   if (!entry) return null
 
   const series = entry.data.map(([date, price]) => ({ date, price }))
+
+  // Inject exact event dates so ReferenceLine can match them
+  const eventDates = [
+    { date: announcementDate, event: 'announcement' },
+    { date: implementationDate, event: 'implementation' },
+  ]
+
+  for (const ev of eventDates) {
+    const evTime = new Date(ev.date).getTime()
+    if (series.some(p => p.date === ev.date)) continue
+
+    let insertIdx = series.findIndex(p => new Date(p.date).getTime() > evTime)
+    if (insertIdx === -1 || insertIdx === 0) continue
+
+    const before = series[insertIdx - 1]
+    const after = series[insertIdx]
+    const t1 = new Date(before.date).getTime()
+    const t2 = new Date(after.date).getTime()
+    const ratio = (evTime - t1) / (t2 - t1)
+    const price = Math.round((before.price + ratio * (after.price - before.price)) * 100) / 100
+
+    series.splice(insertIdx, 0, { date: ev.date, price })
+  }
+
   return { series, unit: entry.unit }
 }
 
